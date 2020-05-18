@@ -2,6 +2,7 @@
 # importing the requests library
 import requests
 import json
+import hashlib
 
 #create a json file by a list with the response of server in json format
 #the open command is a operating system command and the flag 'w' is to write in a file
@@ -35,7 +36,9 @@ def decode(str, number):
     decoded = ''.join(arr)
     #print(decoded)
     return decoded
-            
+#Econded message function
+#def encoded(str):
+
 # api-endpoint
 URL = 'https://api.codenation.dev/v1/challenge/dev-ps/generate-data?token=cb782ac5c5013d7fa2f34906b7a68702e9a79e5b'
 
@@ -52,16 +55,27 @@ encrypted = data['cifrado']
 #call the decoded message function
 decoded = decode(encrypted, number)
 
+#Enconding decoded message
+encoding = hashlib.sha1(decoded.encode()).hexdigest()
+
 #inserting the decoded message int the data dict
 data['decifrado'] = decoded
+data['resumo_criptografico'] = encoding
 
 #read the data(dict) and create a json file called answer.json and put the data in this file 
 write_json(data)
+
+#Response
+#files={'answer': open('answer.json', 'r')}
+URL_RESPONSE = 'https://api.codenation.dev/v1/challenge/dev-ps/submit-solution?token=cb782ac5c5013d7fa2f34906b7a68702e9a79e5b'
+response = requests.post(url = URL_RESPONSE, files={'answer': open('answer.json', 'r')})
+print(response.status_code)
 
 #print the answer.json
 #print("Response status: ", r)
 #print("Response in dict form: ", data)
 print("Answer file: ", read_json('answer.json'))
 #print("Number of 'numero_casas': ", number)
-print("Encrypted message: ", encrypted)
+#print("Encrypted message: ", encrypted)
 print("Decoded message: ", decoded)
+print("Encoded message: ", encoding)
