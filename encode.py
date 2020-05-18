@@ -68,6 +68,7 @@ write_json(data)
 #Response
 #files={'answer': open('answer.json', 'r')}
 URL_RESPONSE = 'https://api.codenation.dev/v1/challenge/dev-ps/submit-solution?token=cb782ac5c5013d7fa2f34906b7a68702e9a79e5b'
+#The file format is in multipart/form-data
 response = requests.post(url = URL_RESPONSE, files={'answer': open('answer.json', 'r')})
 print(response.status_code)
 
